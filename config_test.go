@@ -36,8 +36,8 @@ func TestLoadConfig_Defaults(t *testing.T) {
 	if cfg.ListenAddr != ":8080" {
 		t.Errorf("ListenAddr = %q, want %q", cfg.ListenAddr, ":8080")
 	}
-	if cfg.Model != "gpt-4o" {
-		t.Errorf("Model = %q, want %q", cfg.Model, "gpt-4o")
+	if cfg.Model != "gpt-5-nano" {
+		t.Errorf("Model = %q, want %q", cfg.Model, "gpt-5-nano")
 	}
 }
 

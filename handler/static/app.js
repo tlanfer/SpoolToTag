@@ -21,6 +21,27 @@
     let analyzeController = null;
     let nfcController = null;
 
+    function resizeImage(file, maxSize) {
+        return new Promise(function (resolve) {
+            const img = new Image();
+            img.onload = function () {
+                let w = img.width, h = img.height;
+                if (w <= maxSize && h <= maxSize) {
+                    resolve(file);
+                    return;
+                }
+                if (w > h) { h = Math.round(h * maxSize / w); w = maxSize; }
+                else { w = Math.round(w * maxSize / h); h = maxSize; }
+                const canvas = document.createElement("canvas");
+                canvas.width = w;
+                canvas.height = h;
+                canvas.getContext("2d").drawImage(img, 0, 0, w, h);
+                canvas.toBlob(function (blob) { resolve(blob); }, "image/jpeg", 0.85);
+            };
+            img.src = URL.createObjectURL(file);
+        });
+    }
+
     function show(el) { el.classList.remove("hidden"); }
     function hide(el) { el.classList.add("hidden"); }
 
@@ -56,8 +77,9 @@
         analyzeController = new AbortController();
 
         try {
+            const resized = await resizeImage(selectedFile, 1024);
             const formData = new FormData();
-            formData.append("image", selectedFile);
+            formData.append("image", resized, "photo.jpg");
 
             const resp = await fetch("/api/analyze", {
                 method: "POST",
