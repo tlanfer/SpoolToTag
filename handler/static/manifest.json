@@ -1,0 +1,16 @@
+{
+    "name": "SpoolToTag",
+    "short_name": "SpoolToTag",
+    "description": "Photograph a spool label, write an NFC tag",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#02182B",
+    "theme_color": "#D7263D",
+    "icons": [
+        {
+            "src": "icon.svg",
+            "sizes": "any",
+            "type": "image/svg+xml"
+        }
+    ]
+}
