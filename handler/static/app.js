@@ -3,9 +3,6 @@
 
     const photoInput = document.getElementById("photo-input");
     const captureSection = document.getElementById("capture-section");
-    const previewSection = document.getElementById("preview-section");
-    const previewImg = document.getElementById("preview-img");
-    const analyzeBtn = document.getElementById("analyze-btn");
     const loadingSection = document.getElementById("loading-section");
     const resultSection = document.getElementById("result-section");
     const spoolForm = document.getElementById("spool-form");
@@ -34,22 +31,14 @@
         hide(errorBanner);
     }
 
-    photoInput.addEventListener("change", function () {
+    photoInput.addEventListener("change", async function () {
         if (!photoInput.files || !photoInput.files[0]) return;
         selectedFile = photoInput.files[0];
-        previewImg.src = URL.createObjectURL(selectedFile);
         hide(captureSection);
-        show(previewSection);
         hide(resultSection);
         hide(nfcStatus);
         hideError();
-    });
-
-    analyzeBtn.addEventListener("click", async function () {
-        if (!selectedFile) return;
-        hide(previewSection);
         show(loadingSection);
-        hideError();
 
         try {
             const formData = new FormData();
@@ -77,7 +66,7 @@
             show(resultSection);
         } catch (err) {
             hide(loadingSection);
-            show(previewSection);
+            show(captureSection);
             showError("Analysis failed: " + err.message);
         }
     });
