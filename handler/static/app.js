@@ -114,27 +114,32 @@
         }
 
         try {
+            const json = JSON.stringify(spoolData);
             nfcMessage.textContent = "Hold your phone near the NFC tag...";
             show(nfcStatus);
 
             const ndef = new NDEFReader();
-            await ndef.write(
-                {
-                    records: [
-                        {
-                            recordType: "mime",
-                            mediaType: "application/json",
-                            data: new TextEncoder().encode(JSON.stringify(spoolData)),
-                        },
-                    ],
-                },
-                { overwrite: true }
-            );
+            const ctrl = new AbortController();
 
-            nfcMessage.textContent = "Tag written successfully!";
+            // Wait for a tag to be in range, then write
+            ndef.addEventListener("reading", async () => {
+                try {
+                    await ndef.write({ records: [{ recordType: "text", data: json }] });
+                    ctrl.abort();
+                    nfcMessage.textContent = "Tag written successfully!";
+                } catch (writeErr) {
+                    ctrl.abort();
+                    hide(nfcStatus);
+                    showError("NFC write failed: " + writeErr.message
+                        + ". Make sure the tag is NDEF-formatted and not read-only.");
+                }
+            }, { once: true });
+
+            await ndef.scan({ signal: ctrl.signal });
         } catch (err) {
+            if (err.name === "AbortError") return;
             hide(nfcStatus);
-            showError("NFC write failed: " + err.message);
+            showError("NFC failed: " + err.message);
         }
     });
 })();
