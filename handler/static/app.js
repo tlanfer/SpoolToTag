@@ -77,7 +77,7 @@
         analyzeController = new AbortController();
 
         try {
-            const resized = await resizeImage(selectedFile, 1024);
+            const resized = await resizeImage(selectedFile, 2048);
             const formData = new FormData();
             formData.append("image", resized, "photo.jpg");
 
