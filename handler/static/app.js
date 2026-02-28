@@ -118,15 +118,18 @@
             show(nfcStatus);
 
             const ndef = new NDEFReader();
-            await ndef.write({
-                records: [
-                    {
-                        recordType: "mime",
-                        mediaType: "application/json",
-                        data: new TextEncoder().encode(JSON.stringify(spoolData)),
-                    },
-                ],
-            });
+            await ndef.write(
+                {
+                    records: [
+                        {
+                            recordType: "mime",
+                            mediaType: "application/json",
+                            data: new TextEncoder().encode(JSON.stringify(spoolData)),
+                        },
+                    ],
+                },
+                { overwrite: true }
+            );
 
             nfcMessage.textContent = "Tag written successfully!";
         } catch (err) {
