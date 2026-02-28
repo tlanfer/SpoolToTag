@@ -16,6 +16,7 @@ Photograph a 3D printer filament spool label, extract the filament info with AI,
 - An OpenAI API key
 - NTAG 215 NFC tags (NTAG 213 is too small)
 - Chrome on Android (for Web NFC support)
+- **HTTPS** — the Web NFC API requires a [secure origin](https://w3c.github.io/webappsec-secure-contexts/)
 
 ## Quick Start
 
@@ -30,7 +31,9 @@ Or with Docker:
 OPENAI_API_KEY=sk-... docker compose up --build
 ```
 
-Then open `http://<your-ip>:8080` on your phone.
+### HTTPS
+
+The Web NFC API only works over HTTPS (secure origins). The easiest way to add HTTPS is with a reverse proxy like [caddy-docker-proxy](https://github.com/lucaslorentz/caddy-docker-proxy). For local development, `localhost` is treated as a secure origin by browsers.
 
 ## Configuration
 
