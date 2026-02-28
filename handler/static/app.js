@@ -71,6 +71,14 @@
         }
     });
 
+    document.getElementById("retake-btn").addEventListener("click", function () {
+        hide(resultSection);
+        hide(nfcStatus);
+        hideError();
+        photoInput.value = "";
+        show(captureSection);
+    });
+
     // Sync color picker and hex input
     fieldColorHex.addEventListener("input", function () {
         if (/^#[0-9a-fA-F]{6}$/.test(fieldColorHex.value)) {

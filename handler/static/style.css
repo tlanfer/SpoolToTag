@@ -81,6 +81,17 @@ h2 {
     background: #b81e33;
 }
 
+.btn-secondary {
+    background: transparent;
+    color: rgba(255, 255, 255, 0.5);
+    border: 2px solid rgba(255, 255, 255, 0.15);
+}
+
+.btn-secondary:active {
+    color: #fff;
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
 /* Capture */
 .capture-btn {
     display: flex;
@@ -173,9 +184,14 @@ h2 {
     cursor: pointer;
 }
 
+#write-btn,
+#retake-btn {
+    margin-top: 1rem;
+    width: 100%;
+}
+
 #write-btn {
     margin-top: 2rem;
-    width: 100%;
 }
 
 /* Spinner */
