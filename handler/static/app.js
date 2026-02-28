@@ -18,6 +18,8 @@
     const fieldMaxTemp = document.getElementById("field-max-temp");
 
     let selectedFile = null;
+    let analyzeController = null;
+    let nfcController = null;
 
     function show(el) { el.classList.remove("hidden"); }
     function hide(el) { el.classList.add("hidden"); }
@@ -31,6 +33,17 @@
         hide(errorBanner);
     }
 
+    function resetToCapture() {
+        if (analyzeController) { analyzeController.abort(); analyzeController = null; }
+        if (nfcController) { nfcController.abort(); nfcController = null; }
+        hide(loadingSection);
+        hide(resultSection);
+        hide(nfcStatus);
+        hideError();
+        photoInput.value = "";
+        show(captureSection);
+    }
+
     photoInput.addEventListener("change", async function () {
         if (!photoInput.files || !photoInput.files[0]) return;
         selectedFile = photoInput.files[0];
@@ -40,6 +53,8 @@
         hideError();
         show(loadingSection);
 
+        analyzeController = new AbortController();
+
         try {
             const formData = new FormData();
             formData.append("image", selectedFile);
@@ -47,6 +62,7 @@
             const resp = await fetch("/api/analyze", {
                 method: "POST",
                 body: formData,
+                signal: analyzeController.signal,
             });
 
             if (!resp.ok) {
@@ -62,22 +78,21 @@
             fieldMinTemp.value = data.min_temp || "";
             fieldMaxTemp.value = data.max_temp || "";
 
+            analyzeController = null;
             hide(loadingSection);
             show(resultSection);
         } catch (err) {
+            analyzeController = null;
             hide(loadingSection);
+            if (err.name === "AbortError") return;
             show(captureSection);
             showError("Analysis failed: " + err.message);
         }
     });
 
-    document.getElementById("retake-btn").addEventListener("click", function () {
-        hide(resultSection);
-        hide(nfcStatus);
-        hideError();
-        photoInput.value = "";
-        show(captureSection);
-    });
+    document.getElementById("cancel-analyze-btn").addEventListener("click", resetToCapture);
+    document.getElementById("retake-btn").addEventListener("click", resetToCapture);
+    document.getElementById("nfc-done-btn").addEventListener("click", resetToCapture);
 
     // Sync color picker and hex input
     fieldColorHex.addEventListener("input", function () {
@@ -114,11 +129,11 @@
             const json = JSON.stringify(spoolData);
             nfcMessage.textContent = "Hold your phone near the NFC tag...";
             show(nfcStatus);
+            hide(resultSection);
 
             const ndef = new NDEFReader();
-            const ctrl = new AbortController();
+            nfcController = new AbortController();
 
-            // Wait for a tag to be in range, then write
             ndef.addEventListener("reading", async () => {
                 try {
                     await ndef.write({ records: [{
@@ -126,20 +141,25 @@
                         mediaType: "application/json",
                         data: new TextEncoder().encode(json),
                     }] });
-                    ctrl.abort();
+                    nfcController.abort();
+                    nfcController = null;
                     nfcMessage.textContent = "Tag written successfully!";
                 } catch (writeErr) {
-                    ctrl.abort();
+                    nfcController.abort();
+                    nfcController = null;
                     hide(nfcStatus);
+                    show(resultSection);
                     showError("NFC write failed: " + writeErr.message
                         + ". Make sure the tag is NDEF-formatted and not read-only.");
                 }
             }, { once: true });
 
-            await ndef.scan({ signal: ctrl.signal });
+            await ndef.scan({ signal: nfcController.signal });
         } catch (err) {
+            nfcController = null;
             if (err.name === "AbortError") return;
             hide(nfcStatus);
+            show(resultSection);
             showError("NFC failed: " + err.message);
         }
     });
