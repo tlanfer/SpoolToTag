@@ -124,7 +124,11 @@
             // Wait for a tag to be in range, then write
             ndef.addEventListener("reading", async () => {
                 try {
-                    await ndef.write({ records: [{ recordType: "text", data: json }] });
+                    await ndef.write({ records: [{
+                        recordType: "mime",
+                        mediaType: "application/json",
+                        data: new TextEncoder().encode(json),
+                    }] });
                     ctrl.abort();
                     nfcMessage.textContent = "Tag written successfully!";
                 } catch (writeErr) {
