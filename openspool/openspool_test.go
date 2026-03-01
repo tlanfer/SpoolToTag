@@ -5,7 +5,7 @@ import (
 )
 
 func TestNew_Valid(t *testing.T) {
-	s, err := New("PLA", "#FF5733", "Bambu", 190, 220)
+	s, err := New("PLA", "#FF5733", "eSun", 190, 220)
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -23,7 +23,7 @@ func TestNew_Valid(t *testing.T) {
 func TestNew_InvalidColorHex(t *testing.T) {
 	tests := []string{"FF5733", "#GGG000", "#FFF", "red", ""}
 	for _, hex := range tests {
-		_, err := New("PLA", hex, "Bambu", 190, 220)
+		_, err := New("PLA", hex, "eSun", 190, 220)
 		if err == nil {
 			t.Errorf("expected error for color_hex %q", hex)
 		}
@@ -31,7 +31,7 @@ func TestNew_InvalidColorHex(t *testing.T) {
 }
 
 func TestNew_EmptyType(t *testing.T) {
-	_, err := New("", "#FF5733", "Bambu", 190, 220)
+	_, err := New("", "#FF5733", "eSun", 190, 220)
 	if err == nil {
 		t.Error("expected error for empty type")
 	}
@@ -57,7 +57,7 @@ func TestNew_BadTemps(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			_, err := New("PLA", "#FF5733", "Bambu", tt.min, tt.max)
+			_, err := New("PLA", "#FF5733", "eSun", tt.min, tt.max)
 			if err == nil {
 				t.Error("expected error")
 			}
@@ -71,12 +71,37 @@ func TestValidate_WrongProtocol(t *testing.T) {
 		Version:  Version,
 		Type:     "PLA",
 		ColorHex: "#FF5733",
-		Brand:    "Bambu",
+		Brand:    "eSun",
 		MinTemp:  190,
 		MaxTemp:  220,
 	}
 	if err := s.Validate(); err == nil {
 		t.Error("expected error for wrong protocol")
+	}
+}
+
+func TestNormalizeBrand(t *testing.T) {
+	tests := []struct {
+		input string
+		want  string
+	}{
+		{"eSun", "eSun"},
+		{"esun", "eSun"},
+		{"ESUN", "eSun"},
+		{"Overture", "Overture"},
+		{"overture", "Overture"},
+		{"PolyLite", "PolyLite"},
+		{"PolyTerra", "PolyTerra"},
+		{"Generic", "Generic"},
+		{"Bambu", "Generic"},
+		{"Unknown Brand", "Generic"},
+		{"", "Generic"},
+	}
+	for _, tt := range tests {
+		got := NormalizeBrand(tt.input)
+		if got != tt.want {
+			t.Errorf("NormalizeBrand(%q) = %q, want %q", tt.input, got, tt.want)
+		}
 	}
 }
 

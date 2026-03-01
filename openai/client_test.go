@@ -58,8 +58,8 @@ func TestClient_Analyze_Success(t *testing.T) {
 	if spool.ColorHex != "#FF5733" {
 		t.Errorf("color_hex = %q, want %q", spool.ColorHex, "#FF5733")
 	}
-	if spool.Brand != "Bambu" {
-		t.Errorf("brand = %q, want %q", spool.Brand, "Bambu")
+	if spool.Brand != "Generic" {
+		t.Errorf("brand = %q, want %q", spool.Brand, "Generic")
 	}
 	if spool.MinTemp != 190 {
 		t.Errorf("min_temp = %d, want %d", spool.MinTemp, 190)

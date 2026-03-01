@@ -43,7 +43,15 @@
             <h2>Extracted Info</h2>
             <form id="spool-form">
                 <label>Type <input type="text" id="field-type" required></label>
-                <label>Brand <input type="text" id="field-brand" required></label>
+                <label>Brand
+                    <select id="field-brand" required>
+                        <option value="Generic">Generic</option>
+                        <option value="Overture">Overture</option>
+                        <option value="PolyLite">PolyLite</option>
+                        <option value="eSun">eSun</option>
+                        <option value="PolyTerra">PolyTerra</option>
+                    </select>
+                </label>
                 <label>Color
                     <span class="color-row">
                         <input type="text" id="field-color-hex" required pattern="#[0-9a-fA-F]{6}">

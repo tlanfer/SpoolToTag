@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"regexp"
 	"strconv"
+	"strings"
 )
 
 const (
@@ -12,6 +13,17 @@ const (
 )
 
 var hexColorRe = regexp.MustCompile(`^#[0-9a-fA-F]{6}$`)
+
+var ValidBrands = []string{"Generic", "Overture", "PolyLite", "eSun", "PolyTerra"}
+
+func NormalizeBrand(brand string) string {
+	for _, b := range ValidBrands {
+		if strings.EqualFold(brand, b) {
+			return b
+		}
+	}
+	return "Generic"
+}
 
 type SpoolData struct {
 	Protocol string `json:"protocol"`

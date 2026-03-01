@@ -140,6 +140,32 @@ h2 {
     color: rgba(255, 255, 255, 0.5);
 }
 
+#spool-form select {
+    display: block;
+    width: 100%;
+    padding: 0.75rem 0;
+    margin-top: 0.3rem;
+    border: none;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.15);
+    border-radius: 0;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #fff;
+    background: transparent;
+    appearance: none;
+    transition: border-color 0.2s;
+}
+
+#spool-form select:focus {
+    outline: none;
+    border-bottom-color: #D7263D;
+}
+
+#spool-form select option {
+    background: #02182B;
+    color: #fff;
+}
+
 #spool-form input[type="text"],
 #spool-form input[type="number"] {
     display: block;

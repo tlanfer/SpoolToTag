@@ -23,7 +23,7 @@ func (m *mockAnalyzer) Analyze(_ context.Context, _ []byte, _ string) (openspool
 }
 
 func TestAnalyze_Success(t *testing.T) {
-	spool, _ := openspool.New("PLA", "#FF5733", "Bambu", 190, 220)
+	spool, _ := openspool.New("PLA", "#FF5733", "eSun", 190, 220)
 	mock := &mockAnalyzer{result: spool}
 	h := New(mock)
 
