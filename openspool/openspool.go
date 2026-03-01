@@ -12,7 +12,7 @@ const (
 	Version  = "1.0"
 )
 
-var hexColorRe = regexp.MustCompile(`^#[0-9a-fA-F]{6}$`)
+var hexColorRe = regexp.MustCompile(`^[0-9a-fA-F]{6}$`)
 
 var ValidBrands = []string{"Generic", "Overture", "PolyLite", "eSun", "PolyTerra"}
 

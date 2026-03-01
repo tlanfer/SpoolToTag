@@ -32,7 +32,7 @@ func TestClient_Analyze_Success(t *testing.T) {
 			Choices: []choice{
 				{
 					Message: responseMessage{
-						Content: `{"type":"PLA","color_hex":"#FF5733","brand":"Bambu","min_temp":190,"max_temp":220}`,
+						Content: `{"type":"PLA","color_hex":"FF5733","brand":"Bambu","min_temp":190,"max_temp":220}`,
 					},
 				},
 			},
@@ -55,8 +55,8 @@ func TestClient_Analyze_Success(t *testing.T) {
 	if spool.Type != "PLA" {
 		t.Errorf("type = %q, want %q", spool.Type, "PLA")
 	}
-	if spool.ColorHex != "#FF5733" {
-		t.Errorf("color_hex = %q, want %q", spool.ColorHex, "#FF5733")
+	if spool.ColorHex != "FF5733" {
+		t.Errorf("color_hex = %q, want %q", spool.ColorHex, "FF5733")
 	}
 	if spool.Brand != "Generic" {
 		t.Errorf("brand = %q, want %q", spool.Brand, "Generic")

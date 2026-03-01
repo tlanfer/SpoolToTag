@@ -61,7 +61,7 @@ func (c *Client) Analyze(ctx context.Context, imageData []byte, contentType stri
 					Type: "object",
 					Properties: map[string]schemaEntry{
 						"type":      {Type: "string", Description: "Filament type, e.g. PLA, PETG, ABS, TPU"},
-						"color_hex": {Type: "string", Description: "Single primary color as one hex code, e.g. #FF5733. Only return one color."},
+						"color_hex": {Type: "string", Description: "Single primary color as a 6-digit hex code without # prefix, e.g. FF5733. Only return one color."},
 						"brand":     {Type: "string", Description: "Brand name. Must be one of: Generic, Overture, PolyLite, eSun, PolyTerra"},
 						"min_temp":  {Type: "integer", Description: "Minimum nozzle temperature in Celsius"},
 						"max_temp":  {Type: "integer", Description: "Maximum nozzle temperature in Celsius"},
@@ -116,6 +116,7 @@ func (c *Client) Analyze(ctx context.Context, imageData []byte, contentType stri
 
 	colorHex := strings.Split(extracted.ColorHex, ",")[0]
 	colorHex = strings.TrimSpace(colorHex)
+	colorHex = strings.TrimPrefix(colorHex, "#")
 
 	brand := openspool.NormalizeBrand(extracted.Brand)
 

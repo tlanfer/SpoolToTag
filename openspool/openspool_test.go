@@ -5,7 +5,7 @@ import (
 )
 
 func TestNew_Valid(t *testing.T) {
-	s, err := New("PLA", "#FF5733", "eSun", 190, 220)
+	s, err := New("PLA", "FF5733", "eSun", 190, 220)
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -21,7 +21,7 @@ func TestNew_Valid(t *testing.T) {
 }
 
 func TestNew_InvalidColorHex(t *testing.T) {
-	tests := []string{"FF5733", "#GGG000", "#FFF", "red", ""}
+	tests := []string{"#FF5733", "GGG000", "FFF", "red", ""}
 	for _, hex := range tests {
 		_, err := New("PLA", hex, "eSun", 190, 220)
 		if err == nil {
@@ -31,14 +31,14 @@ func TestNew_InvalidColorHex(t *testing.T) {
 }
 
 func TestNew_EmptyType(t *testing.T) {
-	_, err := New("", "#FF5733", "eSun", 190, 220)
+	_, err := New("", "FF5733", "eSun", 190, 220)
 	if err == nil {
 		t.Error("expected error for empty type")
 	}
 }
 
 func TestNew_EmptyBrand(t *testing.T) {
-	_, err := New("PLA", "#FF5733", "", 190, 220)
+	_, err := New("PLA", "FF5733", "", 190, 220)
 	if err == nil {
 		t.Error("expected error for empty brand")
 	}
@@ -57,7 +57,7 @@ func TestNew_BadTemps(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			_, err := New("PLA", "#FF5733", "eSun", tt.min, tt.max)
+			_, err := New("PLA", "FF5733", "eSun", tt.min, tt.max)
 			if err == nil {
 				t.Error("expected error")
 			}
@@ -70,7 +70,7 @@ func TestValidate_WrongProtocol(t *testing.T) {
 		Protocol: "wrong",
 		Version:  Version,
 		Type:     "PLA",
-		ColorHex: "#FF5733",
+		ColorHex: "FF5733",
 		Brand:    "eSun",
 		MinTemp:  190,
 		MaxTemp:  220,

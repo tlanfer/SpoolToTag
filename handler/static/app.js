@@ -95,8 +95,8 @@
             const data = await resp.json();
             fieldType.value = data.type || "";
             fieldBrand.value = data.brand || "";
-            fieldColorHex.value = data.color_hex || "#000000";
-            fieldColorPicker.value = data.color_hex || "#000000";
+            fieldColorHex.value = data.color_hex || "000000";
+            fieldColorPicker.value = "#" + (data.color_hex || "000000");
             fieldMinTemp.value = data.min_temp || "";
             fieldMaxTemp.value = data.max_temp || "";
 
@@ -118,13 +118,13 @@
 
     // Sync color picker and hex input
     fieldColorHex.addEventListener("input", function () {
-        if (/^#[0-9a-fA-F]{6}$/.test(fieldColorHex.value)) {
-            fieldColorPicker.value = fieldColorHex.value;
+        if (/^[0-9a-fA-F]{6}$/.test(fieldColorHex.value)) {
+            fieldColorPicker.value = "#" + fieldColorHex.value;
         }
     });
 
     fieldColorPicker.addEventListener("input", function () {
-        fieldColorHex.value = fieldColorPicker.value;
+        fieldColorHex.value = fieldColorPicker.value.substring(1);
     });
 
     spoolForm.addEventListener("submit", async function (e) {
